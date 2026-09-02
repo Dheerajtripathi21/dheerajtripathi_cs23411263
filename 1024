@@ -1,0 +1,23 @@
+from typing import List
+
+class Solution:
+    def videoStitching(self, clips: List[List[int]], time: int) -> int:
+        max_reach = [0] * (time + 1)
+        
+        for start, end in clips:
+            if start <= time:
+                max_reach[start] = max(max_reach[start], end)
+        
+        count = 0
+        current_end = 0
+        farthest = 0
+        
+        for i in range(time):
+            farthest = max(farthest, max_reach[i])
+            if farthest <= i:
+                return -1
+            if i == current_end:
+                count += 1
+                current_end = farthest
+        
+        return count
