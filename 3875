@@ -1,0 +1,21 @@
+from typing import List
+
+class Solution:
+    def uniformArray(self, nums1: List[int]) -> bool:
+        n = len(nums1)
+        odd_indices = [i for i in range(n) if nums1[i] % 2 != 0]
+        
+        nums2 = [0] * n
+        
+        if not odd_indices:
+            nums2 = nums1[:]
+        else:
+            k = odd_indices[0]
+            for i in range(n):
+                if nums1[i] % 2 != 0:
+                    nums2[i] = nums1[i]
+                else:
+                    nums2[i] = nums1[i] - nums1[k]
+        
+        parities = {x % 2 for x in nums2}
+        return len(parities) == 1
