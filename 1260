@@ -1,0 +1,30 @@
+from typing import List
+
+
+class Solution:
+    def shiftGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        
+        m = len(grid)
+        n = len(grid[0])
+
+        # Convert 2D grid into 1D array
+        arr = []
+
+        for row in grid:
+            for num in row:
+                arr.append(num)
+
+        # Reduce unnecessary shifts
+        k = k % (m * n)
+
+        # Shift array to the right
+        arr = arr[-k:] + arr[:-k]
+
+        # Convert 1D array back into 2D grid
+        result = []
+
+        for i in range(m):
+            row = arr[i * n : (i + 1) * n]
+            result.append(row)
+
+        return result
