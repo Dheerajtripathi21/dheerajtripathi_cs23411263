@@ -1,0 +1,39 @@
+from typing import List
+
+class Solution:
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        
+        max_num = max(nums)
+        L = max_num.bit_length()
+        
+        max_xor = 0
+        trie = {}
+        
+        for num in nums:
+            
+            node = trie
+            for i in range(L, -1, -1):
+                bit = (num >> i) & 1
+                if bit not in node:
+                    node[bit] = {}
+                node = node[bit]
+            
+           
+            node = trie
+            curr_xor = 0
+            for i in range(L, -1, -1):
+                bit = (num >> i) & 1
+                toggled_bit = 1 - bit
+                if toggled_bit in node:
+                    curr_xor = (curr_xor << 1) | 1
+                    node = node[toggled_bit]
+                else:
+                    curr_xor = curr_xor << 1
+                    node = node[bit]
+            
+            max_xor = max(max_xor, curr_xor)
+        
+        return max_xor
