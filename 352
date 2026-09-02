@@ -1,0 +1,16 @@
+import bisect
+from typing import List
+
+class SummaryRanges:
+    def __init__(self):
+        self.intervals = []
+
+    def addNum(self, value: int) -> None:
+        starts = [iv[0] for iv in self.intervals]
+        idx = bisect.bisect_left(starts, value)
+        
+        if idx > 0 and self.intervals[idx-1][1] >= value:
+            return
+        if idx < len(self.intervals) and self.intervals[idx][0] == value:
+            return
+        
