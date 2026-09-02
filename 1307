@@ -1,0 +1,31 @@
+from typing import List
+from itertools import permutations
+
+class Solution:
+    def isSolvable(self, words: List[str], result: str) -> bool:
+        words.append(result)
+        n = len(words)
+        if max(len(w) for w in words[:-1]) > len(result):
+            return False
+        
+        coeff = {}
+        for i, w in enumerate(words):
+            sign = -1 if i == n - 1 else 1
+            for pos, ch in enumerate(reversed(w)):
+                coeff[ch] = coeff.get(ch, 0) + sign * 10**pos
+        
+        leading = {w[0] for w in words if len(w) > 1}
+        chars = sorted(coeff, key=lambda c: -abs(coeff[c]))
+        
+        def dfs(i, used, total):
+            if i == len(chars):
+                return total == 0
+            ch, c = chars[i], coeff[chars[i]]
+            for d in range(10):
+                if used & (1 << d) or (d == 0 and ch in leading):
+                    continue
+                if dfs(i + 1, used | (1 << d), total + c * d):
+                    return True
+            return False
+        
+        return dfs(0, 0, 0)
